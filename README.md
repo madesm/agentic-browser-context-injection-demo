@@ -28,7 +28,7 @@ See the demo [here](https://youtu.be/jbOWS2KHTGk)
 ### Back-End (Node.js with Express & Terminal Approval)
 
 - **Server Functionality:**  
-  The Node.js backend listens on port 3000 and exposes an `/authorize` endpoint.
+  The Node.js backend listens on port 3005 and exposes an `/authorize` endpoint.
   
 - **Terminal-Based Approval:**  
   When an authorization request is received, the backend prints the request details to the terminal and uses the Node `readline` module to prompt the operator for approval.  
