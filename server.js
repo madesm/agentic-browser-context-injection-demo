@@ -27,16 +27,21 @@ function askQuestion(query) {
 
 // POST /authorize endpoint for human approval
 app.post('/authorize', async (req, res) => {
-  const { userId, sessionToken, scope } = req.body;
+  const { agentId, sessionType, sessionToken, scope } = req.body;
+
   console.log('\n=== Authorization Request Received ===');
-  console.log(`User: ${userId}`);
+  console.log(`Agent ID:        ${agentId}`);
+  console.log(`Session Type:    ${sessionType}`);
+  console.log(`Session Token:   ${sessionToken}`);
   console.log(`Requested Scope: ${scope}`);
   console.log('======================================');
 
-  // (Optional) Validate sessionToken or perform additional security checks
+  // (Optional) Validate sessionToken or perform additional security checks...
 
   // Prompt the operator for approval
-  const answer = await askQuestion(`Approve request for user ${userId} with scope "${scope}"? (yes/no): `);
+  const answer = await askQuestion(
+    `Approve request for agent "${agentId}" with scope "${scope}"? (yes/no): `
+  );
   const authorized = answer.trim().toLowerCase() === 'yes';
   console.log(`Operator response: ${answer.trim()} → Authorized: ${authorized}\n`);
 

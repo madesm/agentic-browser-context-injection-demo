@@ -8,20 +8,25 @@
     // For example, open the console and type: injectContext();
     window.injectContext = function() {
       window.myAppContext = {
-        userId: 'user-123',
+        sessionType: 'AI',
+        agentId: 'agent-123',
         sessionToken: 'abc123',
-        requestedScope: 'read:importantData'
+        serviceEndpoint: 'http://localhost:3005/authorize'
       };
       console.log('Context injected:', window.myAppContext);
     };
 
-    // Function to call the backend authorization endpoint
-    async function requestAuthorization(context) {
-      const authorizationEndpoint = 'http://localhost:3005/authorize';
+    // Function to call the backend authorization endpoint using the context
+    async function requestAuthorization(context, scope) {
+      // Use the injected service endpoint instead of a hard-coded URL
+      const authorizationEndpoint = context.serviceEndpoint;
+
+      // The payload includes everything needed for the back end
       const payload = {
-        userId: context.userId,
+        agentId: context.agentId,
+        sessionType: context.sessionType,
         sessionToken: context.sessionToken,
-        scope: context.requestedScope
+        scope: scope
       };
 
       const response = await fetch(authorizationEndpoint, {
@@ -48,11 +53,14 @@
       button.addEventListener('click', async (event) => {
         event.preventDefault();
 
+        // For demonstration, let's define the scope here in the front end:
+        const requiredScope = 'read:importantData';
+
         // If context is injected, require authorization before proceeding.
         if (window.myAppContext) {
           console.log('Injected context detected. Initiating authorization process...');
           try {
-            const result = await requestAuthorization(window.myAppContext);
+            const result = await requestAuthorization(window.myAppContext, requiredScope);
             if (result.authorized) {
               console.log('Authorization approved. Executing secure action...');
               alert('Secure action executed (authorization approved).');
@@ -78,8 +86,9 @@
 <body>
   <!-- The "Click Me!" button is dynamically added -->
   <p>
-    To test the authorization process, open the browser console and type: 
-    <code>injectContext()</code>
+    <strong>How to test:</strong> Open your browser's console and run:
+    <code>injectContext()</code>. Then click the button. The scope is 
+    <code>read:importantData</code> (hard-coded in the button's listener).
   </p>
 </body>
 </html>
