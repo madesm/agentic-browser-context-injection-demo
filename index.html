@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Authorization Demo</title>
+  <script>
+    // Helper: Run this in your browser console to inject context.
+    // For example, open the console and type: injectContext();
+    window.injectContext = function() {
+      window.myAppContext = {
+        userId: 'user-123',
+        sessionToken: 'abc123',
+        requestedScope: 'read:importantData'
+      };
+      console.log('Context injected:', window.myAppContext);
+    };
+
+    // Function to call the backend authorization endpoint
+    async function requestAuthorization(context) {
+      const authorizationEndpoint = 'http://localhost:3005/authorize';
+      const payload = {
+        userId: context.userId,
+        sessionToken: context.sessionToken,
+        scope: context.requestedScope
+      };
+
+      const response = await fetch(authorizationEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get authorization');
+      }
+      return await response.json();
+    }
+
+    // On DOM ready, inject the "Click Me!" button
+    document.addEventListener('DOMContentLoaded', () => {
+      const button = document.createElement('button');
+      button.textContent = 'Click Me!';
+      button.style.fontSize = '16px';
+      button.style.padding = '10px 20px';
+      button.style.margin = '20px';
+      document.body.appendChild(button);
+
+      button.addEventListener('click', async (event) => {
+        event.preventDefault();
+
+        // If context is injected, require authorization before proceeding.
+        if (window.myAppContext) {
+          console.log('Injected context detected. Initiating authorization process...');
+          try {
+            const result = await requestAuthorization(window.myAppContext);
+            if (result.authorized) {
+              console.log('Authorization approved. Executing secure action...');
+              alert('Secure action executed (authorization approved).');
+              // ... Place your secure action code here.
+            } else {
+              console.warn('Authorization denied.');
+              alert('Secure action aborted (authorization denied).');
+            }
+          } catch (error) {
+            console.error('Error during authorization:', error);
+            alert('There was an error with the authorization process.');
+          }
+        } else {
+          // No context injected: simply run the normal process.
+          console.log('No injected context found. Running normal action.');
+          alert('Normal action executed (no authorization required).');
+          // ... Place your normal action code here.
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <!-- The "Click Me!" button is dynamically added -->
+  <p>
+    To test the authorization process, open the browser console and type: 
+    <code>injectContext()</code>
+  </p>
+</body>
+</html>
