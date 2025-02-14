@@ -6,7 +6,7 @@ clicking the "Click Me!" button performs a normal action. When context is
 injected (via the console), clicking the button triggers an authorization
 process that requires terminal-based human approval on the backend.
 
----
+See the demo [here](https://youtu.be/jbOWS2KHTGk)
 
 ## Overview
 
@@ -39,8 +39,6 @@ process that requires terminal-based human approval on the backend.
   The backend responds with a JSON object indicating whether the request was
   authorized (`{ authorized: true }` or `{ authorized: false }`).
 
----
-
 ## Getting Started
 
 ### Prerequisites
@@ -55,3 +53,7 @@ process that requires terminal-based human approval on the backend.
 
    ```bash mkdir authorization-backend cd authorization-backend npm init -y npm
    install express body-parser
+
+## What's Next:
+
+This is a super simple proof of context. There's a lot of work to do to build the context layer and to provide tooling for services to integrate it with their website.
