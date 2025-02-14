@@ -8,6 +8,17 @@ process that requires terminal-based human approval on the backend.
 
 See the demo [here](https://youtu.be/jbOWS2KHTGk)
 
+The idea is that agentic operators (like OpenAI) 
+would inject a context into their browser session to navigate the web more safely.
+
+Websites could listen to this context and use it to trigger various authorization flows
+on behalf of the user. 
+
+Not explored but possible, Agents could only use websites that say they are ai agent ready.
+Additional context could be provided for these interactions for the agents, resulting in mutual information exchange. 
+
+This could be an easy way for Agents to use only safe websites and navigate on behalf of the consumer. 
+
 ## Overview
 
 ### Front-End (HTML + JavaScript)
